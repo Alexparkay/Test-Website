@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronRight, Instagram, Camera, Users, BarChart } from 'lucide-react';
 import Stats from '../components/Stats';
@@ -8,6 +8,24 @@ import WaveBackground from '../components/WaveBackground';
 import FeatureCard from '../components/FeatureCard';
 
 const Home = () => {
+  const [showBanner, setShowBanner] = useState(true);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      if (window.scrollY > lastScrollY) {
+        setShowBanner(false);
+      } else {
+        setShowBanner(true);
+      }
+      lastScrollY = window.scrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <main className="relative">
       <WaveBackground />
@@ -74,6 +92,26 @@ const Home = () => {
         </div>
       </section>
 
+      {/* New Unsplash Photo Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
+          >
+            <img 
+              src="https://unsplash.com/photos/JSEn2f96rzY/download?force=true&w=1920"
+              alt="Black and white photo of man surfing"
+              className="w-full h-auto rounded-xl shadow-lg"
+            />
+            <p className="mt-4 text-gray-600">Photo by Mathieu CHIRICO on Unsplash</p>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Core Services */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4">
@@ -134,38 +172,41 @@ const Home = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1513737567531-bc431c8e5cf2?auto=format&fit=crop&q=80')] opacity-10 bg-cover bg-center mix-blend-overlay"></div>
-        </div>
-        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-4xl font-bold text-white mb-6">Ready to Make Waves?</h2>
-            <p className="text-xl text-blue-100 mb-8">
-              Join the leading surf athletes and brands who trust Wave Digital with their digital presence.
-            </p>
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-white text-blue-600 px-8 py-4 rounded-full hover:shadow-lg transition flex items-center mx-auto group"
+      {showBanner && (
+        <section className="py-24 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400 opacity-80">
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1513737567531-bc431c8e5cf2?auto=format&fit=crop&q=80')] opacity-20 bg-cover bg-center mix-blend-overlay"></div>
+            <div className="absolute inset-0 border-4 border-dashed border-white rounded-xl"></div>
+          </div>
+          <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
             >
-              Schedule a Strategy Call
-              <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </motion.button>
-          </motion.div>
-        </div>
-      </section>
+              <h2 className="text-4xl font-bold text-white mb-6">Ready to Make Waves?</h2>
+              <p className="text-xl text-blue-100 mb-8">
+                Join the leading surf athletes and brands who trust Wave Digital with their digital presence.
+              </p>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-white text-blue-600 px-8 py-4 rounded-full hover:shadow-lg transition flex items-center mx-auto group"
+              >
+                Schedule a Strategy Call
+                <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
+            </motion.div>
+          </div>
+        </section>
+      )}
     </main>
   );
 };
 
 const ClientLogo = ({ name }: { name: string }) => (
-  <div className="h-20 bg-white rounded-lg shadow-sm flex items-center justify-center p-6">
+  <div className="h-20 bg-white rounded-lg shadow-sm flex items-center justify-center p-6 hover:scale-105 transition-transform">
     <span className="text-gray-400 font-medium">{name}</span>
   </div>
 );

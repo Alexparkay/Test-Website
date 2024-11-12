@@ -20,19 +20,21 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    const submissionTime = new Date().toISOString();
+
     try {
       const response = await fetch('https://hook.eu2.make.com/lrfs3mlb6kdtyem8ol7rdiw1aixj6c7r', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ ...formData, submissionTime })
       });
 
       if (response.ok) {
         // Clear form after successful submission
         setFormData({ name: '', email: '', message: '' });
-        alert('Message sent successfully!');
+        alert('Thank you for submitting your message!');
       } else {
         throw new Error('Failed to send message');
       }

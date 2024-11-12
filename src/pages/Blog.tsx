@@ -84,7 +84,7 @@ const BlogPost = ({ title, excerpt, date, author, image }: {
         <span>{author}</span>
       </div>
       <Link
-        to="#"
+        to={`/blog/${title.replace(/\s+/g, '-').toLowerCase()}`}
         className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors"
       >
         Read More
